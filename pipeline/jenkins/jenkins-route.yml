@@ -1,0 +1,72 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    haproxy.router.openshift.io/timeout: 4m
+    openshift.io/generated-by: OpenShiftNewApp
+    openshift.io/host.generated: "true"
+    template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
+  creationTimestamp: "2020-12-02T13:33:25Z"
+  labels:
+    app: jenkins-persistent
+    template: jenkins-persistent-template
+  managedFields:
+  - apiVersion: route.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:haproxy.router.openshift.io/timeout: {}
+          f:openshift.io/generated-by: {}
+          f:template.openshift.io/expose-uri: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:template: {}
+      f:spec:
+        f:tls:
+          .: {}
+          f:insecureEdgeTerminationPolicy: {}
+          f:termination: {}
+        f:to:
+          f:kind: {}
+          f:name: {}
+          f:weight: {}
+        f:wildcardPolicy: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-02T13:33:25Z"
+  - apiVersion: route.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:ingress: {}
+    manager: openshift-router
+    operation: Update
+    time: "2020-12-02T13:33:26Z"
+  name: jenkins
+  namespace: default
+  resourceVersion: "7728672"
+  selfLink: /apis/route.openshift.io/v1/namespaces/default/routes/jenkins
+  uid: 03851d3c-7d31-4b5b-a69e-e11d1107328e
+spec:
+  host: jenkins-default.apps.ocp.lan.stderr.at
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: jenkins
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+  - conditions:
+    - lastTransitionTime: "2020-12-02T13:33:26Z"
+      status: "True"
+      type: Admitted
+    host: jenkins-default.apps.ocp.lan.stderr.at
+    routerCanonicalHostname: apps.ocp.lan.stderr.at
+    routerName: default
+    wildcardPolicy: None

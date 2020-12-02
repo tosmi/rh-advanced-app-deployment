@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: "2020-12-02T13:33:26Z"
+  labels:
+    app: jenkins-persistent
+    template: jenkins-persistent-template
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:template: {}
+      f:spec:
+        f:ports:
+          .: {}
+          k:{"port":50000,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:name: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-02T13:33:26Z"
+  name: jenkins-jnlp
+  namespace: default
+  resourceVersion: "7728683"
+  selfLink: /api/v1/namespaces/default/services/jenkins-jnlp
+  uid: e3bc9820-cfe8-4a19-947e-d527148ac61e
+spec:
+  clusterIP: 172.30.5.252
+  ports:
+  - name: agent
+    port: 50000
+    protocol: TCP
+    targetPort: 50000
+  selector:
+    name: jenkins
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

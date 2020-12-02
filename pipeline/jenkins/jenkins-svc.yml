@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+    service.alpha.openshift.io/dependencies: '[{"name": "jenkins-jnlp", "namespace":
+      "", "kind": "Service"}]'
+    service.openshift.io/infrastructure: "true"
+  creationTimestamp: "2020-12-02T13:33:26Z"
+  labels:
+    app: jenkins-persistent
+    template: jenkins-persistent-template
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+          f:service.alpha.openshift.io/dependencies: {}
+          f:service.openshift.io/infrastructure: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:template: {}
+      f:spec:
+        f:ports:
+          .: {}
+          k:{"port":80,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:name: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-02T13:33:26Z"
+  name: jenkins
+  namespace: default
+  resourceVersion: "7728686"
+  selfLink: /api/v1/namespaces/default/services/jenkins
+  uid: fb571142-1b4a-45d4-8524-14ddb54851ed
+spec:
+  clusterIP: 172.30.48.254
+  ports:
+  - name: web
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    name: jenkins
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

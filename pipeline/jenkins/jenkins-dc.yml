@@ -1,0 +1,112 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: jenkins-persistent
+  name: jenkins
+  namespace: user15-jenkins
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    name: jenkins
+  strategy:
+    activeDeadlineSeconds: 21600
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: jenkins
+    spec:
+      containers:
+      - env:
+        - name: OPENSHIFT_ENABLE_OAUTH
+          value: "true"
+        - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+          value: "true"
+        - name: DISABLE_ADMINISTRATIVE_MONITORS
+          value: "true"
+        - name: KUBERNETES_MASTER
+          value: https://kubernetes.default:443
+        - name: KUBERNETES_TRUST_CERTIFICATES
+          value: "true"
+        - name: JENKINS_SERVICE_NAME
+          value: jenkins
+        - name: JNLP_SERVICE_NAME
+          value: jenkins-jnlp
+        - name: ENABLE_FATAL_ERROR_LOG_FILE
+          value: "false"
+        - name: JENKINS_UC_INSECURE
+          value: "false"
+        - name: CASC_JENKINS_CONFIG
+          value: /var/lib/jenkins/proxy.yaml
+        image: image-registry.openshift-image-registry.svc:5000/openshift/jenkins@sha256:0f28b84725a89504ffd3695ad4c2928e4235643b6135021a9b147f039ef943f3
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /login
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 420
+          periodSeconds: 360
+          successThreshold: 1
+          timeoutSeconds: 240
+        name: jenkins
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /login
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 240
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: "500m"
+          limits:
+            memory: 2Gi
+            cpu: 2
+        securityContext:
+          capabilities: {}
+          privileged: false
+        volumeMounts:
+        - mountPath: /var/lib/jenkins
+          name: jenkins-data
+        - mountPath: /etc/pki/ca-trust/source/anchors
+          name: jenkins-trusted-ca-bundle
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: jenkins
+      serviceAccountName: jenkins
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: jenkins-data
+        persistentVolumeClaim:
+          claimName: jenkins
+      - configMap:
+          defaultMode: 420
+          name: jenkins-trusted-ca-bundle
+          optional: true
+        name: jenkins-trusted-ca-bundle
+  test: false
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - jenkins
+      from:
+        kind: ImageStreamTag
+        name: jenkins:2
+        namespace: openshift
+      lastTriggeredImage: image-registry.openshift-image-registry.svc:5000/openshift/jenkins@sha256:0f28b84725a89504ffd3695ad4c2928e4235643b6135021a9b147f039ef943f3
+    type: ImageChange
+  - type: ConfigChange

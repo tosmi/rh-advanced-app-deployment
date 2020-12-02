@@ -1,0 +1,64 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  creationTimestamp: "2020-12-02T13:10:49Z"
+  labels:
+    app: sonarqube
+    app.kubernetes.io/component: sonarqube
+    app.kubernetes.io/instance: sonarqube
+  managedFields:
+  - apiVersion: route.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:app: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+      f:spec:
+        f:port:
+          .: {}
+          f:targetPort: {}
+        f:to:
+          f:kind: {}
+          f:name: {}
+          f:weight: {}
+        f:wildcardPolicy: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-02T13:10:49Z"
+  - apiVersion: route.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:ingress: {}
+    manager: openshift-router
+    operation: Update
+    time: "2020-12-02T13:10:49Z"
+  name: sonarqube
+  namespace: user15-sonarqube
+  resourceVersion: "3420344"
+  selfLink: /apis/route.openshift.io/v1/namespaces/user15-sonarqube/routes/sonarqube
+  uid: 9a510ece-42dc-454b-ad45-7fb8b77b8e2e
+spec:
+  host: sonarqube-user15-sonarqube.apps.cluster-c78c.c78c.example.opentlc.com
+  port:
+    targetPort: 9000-tcp
+  to:
+    kind: Service
+    name: sonarqube
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+  - conditions:
+    - lastTransitionTime: "2020-12-02T13:10:49Z"
+      status: "True"
+      type: Admitted
+    host: sonarqube-user15-sonarqube.apps.cluster-c78c.c78c.example.opentlc.com
+    routerCanonicalHostname: apps.cluster-c78c.c78c.example.opentlc.com
+    routerName: default
+    wildcardPolicy: None

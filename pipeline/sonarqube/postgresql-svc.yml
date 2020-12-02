@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+    template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+  creationTimestamp: "2020-12-02T12:42:41Z"
+  labels:
+    app: postgresql-persistent
+    app.kubernetes.io/component: postgresql-persistent
+    app.kubernetes.io/instance: postgresql-persistent
+    template: postgresql-persistent-template
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+          f:template.openshift.io/expose-uri: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:template: {}
+      f:spec:
+        f:ports:
+          .: {}
+          k:{"port":5432,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:name: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-02T12:42:41Z"
+  name: postgresql
+  namespace: user15-sonarqube
+  resourceVersion: "3362937"
+  selfLink: /api/v1/namespaces/user15-sonarqube/services/postgresql
+  uid: 40c33b6f-98f0-4c13-8124-8a2e9e6193d0
+spec:
+  clusterIP: 172.30.245.9
+  ports:
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    name: postgresql
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

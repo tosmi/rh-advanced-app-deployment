@@ -3,7 +3,7 @@ kind: Route
 metadata:
   labels:
     app: nexus
-  name: nexus-docker
+  name: nexus-registry
   namespace: user15-nexus
 spec:
   port:
@@ -12,4 +12,6 @@ spec:
     kind: Service
     name: nexus-docker
     weight: 100
+  tls:
+    termination: edge
   wildcardPolicy: None

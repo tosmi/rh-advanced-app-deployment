@@ -44,6 +44,25 @@ spec:
           limits:
             memory: "2Gi"
             cpu: "2"
+        # probes stolen from https://github.com/m88i/nexus-operator
+        livenessProbe:
+          initialDelaySeconds: 240
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 15
+          failureThreshold: 3
+          httpGet:
+            path: /service/rest/v1/status
+            port: 8081
+        readinessProbe:
+          initialDelaySeconds: 240
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 15
+          failureThreshold: 3
+          httpGet:
+            path: /service/rest/v1/status
+            port: 8081
         imagePullPolicy: IfNotPresent
         name: nexus
         ports:

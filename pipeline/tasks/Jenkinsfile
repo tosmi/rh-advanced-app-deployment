@@ -160,6 +160,8 @@ pipeline {
 		error 'Integration Create Test Failed!'
           }
 
+	  // XXX: This only works after a redeployment. Otherwise the task id will change with every CRD cycle.
+	  //
           echo "Retrieving tasks"
           status = sh(returnStdout: true, script: "curl -sw '%{response_code}' -o /dev/null -u 'tasks:redhat1' -X GET http://tasks.${prefix}-tasks-dev.svc.cluster.local:8080/ws/tasks/1").trim()
           echo "Status: " + status
@@ -224,7 +226,7 @@ pipeline {
 		next = "tasks-blue"
 	      }
 
-	      // TDB: image update to pull from nexus
+	      // TBD: image update to pull from nexus
 	      //openshift.set("image", "dc/tasks", "tasks=image-registry.openshift-image-registry.svc:5000/${prefix}-tasks-dev/tasks:${devTag}")
 
 	      echo "Going to deploy ${next}"

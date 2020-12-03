@@ -214,11 +214,35 @@ pipeline {
 	script {
 	  openshift.withCluster() {
             openshift.withProject("${prodProject}") {
+	      def next = ""
 	      def dc_blue = openshift.selector("dc", "tasks-blue")
 	      def dc_green = openshift.selector("dc", "tasks-green")
 
 	      def route = openshift.selector("route", "tasks").object()
 	      echo "Currently ${route.spec.to.name} is active"
+
+	      if ( route.spec.to.name == "task-blue") {
+		next = "tasks-green"
+	      } else {
+		next = "tasks-blue"
+	      }
+	      echo "Going to deploy ${next}"
+              def dc = openshift.selector("dc", next)
+              dc.rollout().latest()
+
+	      timeout(10) {
+                echo "Waiting for deployment to finish..."
+                dc.rollout().status()
+              }
+
+	      echo "Checking service availabilty for  ${next}"
+              def connected = openshift.verifyService("${next}")
+              if (connected) {
+                echo "Able to connect to ${next}"
+              } else {
+                error "Unable to connect to ${next}"
+              }
+
 	    }
 	  }
 	}

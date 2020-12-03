@@ -1,0 +1,283 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: "2020-12-03T09:15:57Z"
+  generation: 1
+  labels:
+    app: eap73-basic-s2i
+    app.kubernetes.io/component: eap73-basic-s2i
+    app.kubernetes.io/instance: eap73-basic-s2i
+    application: tasks
+    template: eap73-basic-s2i
+    xpaas: "7.3"
+  managedFields:
+  - apiVersion: apps.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:application: {}
+          f:template: {}
+          f:xpaas: {}
+      f:spec:
+        f:replicas: {}
+        f:selector:
+          .: {}
+          f:deploymentConfig: {}
+        f:strategy:
+          f:activeDeadlineSeconds: {}
+          f:recreateParams:
+            .: {}
+            f:timeoutSeconds: {}
+          f:type: {}
+        f:template:
+          .: {}
+          f:metadata:
+            .: {}
+            f:annotations:
+              .: {}
+              f:openshift.io/generated-by: {}
+            f:creationTimestamp: {}
+            f:labels:
+              .: {}
+              f:application: {}
+              f:deploymentConfig: {}
+            f:name: {}
+          f:spec:
+            .: {}
+            f:containers:
+              .: {}
+              k:{"name":"tasks"}:
+                .: {}
+                f:env:
+                  .: {}
+                  k:{"name":"AUTO_DEPLOY_EXPLODED"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"ENABLE_GENERATE_DEFAULT_DATASOURCE"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"JGROUPS_CLUSTER_PASSWORD"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"JGROUPS_PING_PROTOCOL"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"MQ_CLUSTER_PASSWORD"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"MQ_QUEUES"}:
+                    .: {}
+                    f:name: {}
+                  k:{"name":"MQ_TOPICS"}:
+                    .: {}
+                    f:name: {}
+                  k:{"name":"OPENSHIFT_DNS_PING_SERVICE_NAME"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"OPENSHIFT_DNS_PING_SERVICE_PORT"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                f:image: {}
+                f:imagePullPolicy: {}
+                f:livenessProbe:
+                  .: {}
+                  f:exec:
+                    .: {}
+                    f:command: {}
+                  f:failureThreshold: {}
+                  f:initialDelaySeconds: {}
+                  f:periodSeconds: {}
+                  f:successThreshold: {}
+                  f:timeoutSeconds: {}
+                f:name: {}
+                f:ports:
+                  .: {}
+                  k:{"containerPort":8080,"protocol":"TCP"}:
+                    .: {}
+                    f:containerPort: {}
+                    f:name: {}
+                    f:protocol: {}
+                  k:{"containerPort":8778,"protocol":"TCP"}:
+                    .: {}
+                    f:containerPort: {}
+                    f:name: {}
+                    f:protocol: {}
+                  k:{"containerPort":8888,"protocol":"TCP"}:
+                    .: {}
+                    f:containerPort: {}
+                    f:name: {}
+                    f:protocol: {}
+                f:readinessProbe:
+                  .: {}
+                  f:exec:
+                    .: {}
+                    f:command: {}
+                  f:failureThreshold: {}
+                  f:initialDelaySeconds: {}
+                  f:periodSeconds: {}
+                  f:successThreshold: {}
+                  f:timeoutSeconds: {}
+                f:resources:
+                  .: {}
+                  f:limits:
+                    .: {}
+                    f:memory: {}
+                f:terminationMessagePath: {}
+                f:terminationMessagePolicy: {}
+            f:dnsPolicy: {}
+            f:restartPolicy: {}
+            f:schedulerName: {}
+            f:securityContext: {}
+            f:terminationGracePeriodSeconds: {}
+        f:triggers: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-03T09:15:57Z"
+  - apiVersion: apps.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:conditions:
+          .: {}
+          k:{"type":"Available"}:
+            .: {}
+            f:lastTransitionTime: {}
+            f:lastUpdateTime: {}
+            f:message: {}
+            f:status: {}
+            f:type: {}
+        f:observedGeneration: {}
+    manager: openshift-controller-manager
+    operation: Update
+    time: "2020-12-03T09:15:57Z"
+  name: tasks
+  namespace: user15-builds
+  resourceVersion: "4680542"
+  selfLink: /apis/apps.openshift.io/v1/namespaces/user15-builds/deploymentconfigs/tasks
+  uid: 9d248b48-841b-4f64-adcd-62bd044c0791
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    deploymentConfig: tasks
+  strategy:
+    activeDeadlineSeconds: 21600
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        application: tasks
+        deploymentConfig: tasks
+      name: tasks
+    spec:
+      containers:
+      - env:
+        - name: JGROUPS_PING_PROTOCOL
+          value: dns.DNS_PING
+        - name: OPENSHIFT_DNS_PING_SERVICE_NAME
+          value: tasks-ping
+        - name: OPENSHIFT_DNS_PING_SERVICE_PORT
+          value: "8888"
+        - name: MQ_CLUSTER_PASSWORD
+          value: tG7eO427
+        - name: MQ_QUEUES
+        - name: MQ_TOPICS
+        - name: JGROUPS_CLUSTER_PASSWORD
+          value: bR8b4XTc
+        - name: AUTO_DEPLOY_EXPLODED
+          value: "false"
+        - name: ENABLE_GENERATE_DEFAULT_DATASOURCE
+          value: "false"
+        image: tasks
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - /opt/eap/bin/livenessProbe.sh
+          failureThreshold: 3
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: tasks
+        ports:
+        - containerPort: 8778
+          name: jolokia
+          protocol: TCP
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 8888
+          name: ping
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - /opt/eap/bin/readinessProbe.sh
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: 1Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 75
+  test: false
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - tasks
+      from:
+        kind: ImageStreamTag
+        name: tasks:latest
+        namespace: user15-builds
+    type: ImageChange
+  - type: ConfigChange
+status:
+  availableReplicas: 0
+  conditions:
+  - lastTransitionTime: "2020-12-03T09:15:57Z"
+    lastUpdateTime: "2020-12-03T09:15:57Z"
+    message: Deployment config does not have minimum availability.
+    status: "False"
+    type: Available
+  latestVersion: 0
+  observedGeneration: 1
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0

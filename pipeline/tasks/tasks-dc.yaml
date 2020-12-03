@@ -1,0 +1,69 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: tasks
+    app.kubernetes.io/component: tasks
+    app.kubernetes.io/instance: tasks
+  name: tasks
+  namespace: user15-tasks-dev
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    deploymentconfig: tasks
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        deploymentconfig: tasks
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/user15-tasks-dev/tasks:latest
+        imagePullPolicy: IfNotPresent
+        name: tasks
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /opt/eap/standalone/configuration/application-users.properties
+          name: jboss-config
+          subPath: application-users.properties
+        - mountPath: /opt/eap/standalone/configuration/application-roles.properties
+          name: jboss-config1
+          subPath: application-roles.properties
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: tasks-config
+        name: jboss-config
+      - configMap:
+          defaultMode: 420
+          name: tasks-config
+        name: jboss-config1
+  test: false
+  triggers: []

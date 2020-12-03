@@ -1,0 +1,44 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: "2020-12-03T09:15:57Z"
+  generation: 1
+  labels:
+    app: eap73-basic-s2i
+    app.kubernetes.io/component: eap73-basic-s2i
+    app.kubernetes.io/instance: eap73-basic-s2i
+    application: tasks
+    template: eap73-basic-s2i
+    xpaas: "7.3"
+  managedFields:
+  - apiVersion: image.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:application: {}
+          f:template: {}
+          f:xpaas: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-03T09:15:57Z"
+  name: tasks-build-artifacts
+  namespace: user15-builds
+  resourceVersion: "4680521"
+  selfLink: /apis/image.openshift.io/v1/namespaces/user15-builds/imagestreams/tasks-build-artifacts
+  uid: d53a73df-d9d5-469f-9753-a5e73486d928
+spec:
+  lookupPolicy:
+    local: false
+status:
+  dockerImageRepository: image-registry.openshift-image-registry.svc:5000/user15-builds/tasks-build-artifacts
+  publicDockerImageRepository: default-route-openshift-image-registry.apps.cluster-c78c.c78c.example.opentlc.com/user15-builds/tasks-build-artifacts

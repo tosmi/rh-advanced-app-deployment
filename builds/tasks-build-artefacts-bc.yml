@@ -1,0 +1,126 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: "2020-12-03T09:15:57Z"
+  labels:
+    app: eap73-basic-s2i
+    app.kubernetes.io/component: eap73-basic-s2i
+    app.kubernetes.io/instance: eap73-basic-s2i
+    application: tasks
+    template: eap73-basic-s2i
+    xpaas: "7.3"
+  managedFields:
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:triggers: {}
+      f:status:
+        f:lastVersion: {}
+    manager: openshift-apiserver
+    operation: Update
+    time: "2020-12-03T09:15:57Z"
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:application: {}
+          f:template: {}
+          f:xpaas: {}
+      f:spec:
+        f:output:
+          f:to:
+            .: {}
+            f:kind: {}
+            f:name: {}
+        f:runPolicy: {}
+        f:source:
+          f:contextDir: {}
+          f:git:
+            .: {}
+            f:ref: {}
+            f:uri: {}
+          f:sourceSecret:
+            .: {}
+            f:name: {}
+          f:type: {}
+        f:strategy:
+          f:sourceStrategy:
+            .: {}
+            f:env: {}
+            f:forcePull: {}
+            f:from:
+              .: {}
+              f:kind: {}
+              f:name: {}
+              f:namespace: {}
+            f:incremental: {}
+          f:type: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-03T09:20:15Z"
+  name: tasks-build-artifacts
+  namespace: user15-builds
+  resourceVersion: "4688861"
+  selfLink: /apis/build.openshift.io/v1/namespaces/user15-builds/buildconfigs/tasks-build-artifacts
+  uid: a6bfa55e-e481-4566-b2d7-f581dca06129
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: tasks-build-artifacts:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    contextDir: /
+    git:
+      ref: master
+      uri: http://gogs-gogs.user15-gogs.svc.cluster.local:3000/CICDLabs/openshift-tasks-private.git
+    sourceSecret:
+      name: build-secret
+    type: Git
+  strategy:
+    sourceStrategy:
+      env:
+      - name: MAVEN_MIRROR_URL
+        value: http://nexus.user15-nexus.svc.cluster.local:8081/repository/maven-all-public
+      - name: MAVEN_ARGS_APPEND
+        value: -Dcom.redhat.xpaas.repo.jbossorg
+      - name: GALLEON_PROVISION_LAYERS
+      - name: GALLEON_PROVISION_DEFAULT_FAT_SERVER
+        value: "true"
+      - name: ARTIFACT_DIR
+      forcePull: true
+      from:
+        kind: ImageStreamTag
+        name: jboss-eap73-openshift:7.3
+        namespace: openshift
+      incremental: true
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: RL8A7I4y
+    type: GitHub
+  - generic:
+      secret: a37uEjvB
+    type: Generic
+  - imageChange:
+      lastTriggeredImageID: image-registry.openshift-image-registry.svc:5000/openshift/jboss-eap73-openshift@sha256:3068155484900c8b4aeb24584ac4817a190383e3b0708d032f26c300a9c72c1b
+    type: ImageChange
+  - type: ConfigChange
+status:
+  lastVersion: 1

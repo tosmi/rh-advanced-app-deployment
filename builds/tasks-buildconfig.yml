@@ -1,0 +1,111 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: "2020-12-03T09:15:57Z"
+  labels:
+    app: eap73-basic-s2i
+    app.kubernetes.io/component: eap73-basic-s2i
+    app.kubernetes.io/instance: eap73-basic-s2i
+    application: tasks
+    template: eap73-basic-s2i
+    xpaas: "7.3"
+  managedFields:
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:application: {}
+          f:template: {}
+          f:xpaas: {}
+      f:spec:
+        f:output:
+          f:to:
+            .: {}
+            f:kind: {}
+            f:name: {}
+        f:runPolicy: {}
+        f:source:
+          f:dockerfile: {}
+          f:images: {}
+          f:type: {}
+        f:strategy:
+          f:dockerStrategy:
+            .: {}
+            f:from:
+              .: {}
+              f:kind: {}
+              f:name: {}
+              f:namespace: {}
+            f:imageOptimizationPolicy: {}
+          f:type: {}
+        f:triggers: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-03T09:15:57Z"
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:lastVersion: {}
+    manager: openshift-apiserver
+    operation: Update
+    time: "2020-12-03T09:15:57Z"
+  name: tasks
+  namespace: user15-builds
+  resourceVersion: "4680540"
+  selfLink: /apis/build.openshift.io/v1/namespaces/user15-builds/buildconfigs/tasks
+  uid: 371eb6c6-ac1a-4083-b386-ef4757c6afae
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: tasks:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    dockerfile: |-
+      FROM jboss-eap73-runtime-openshift:7.3
+      COPY /server $JBOSS_HOME
+      USER root
+      RUN chown -R jboss:root $JBOSS_HOME && chmod -R ug+rwX $JBOSS_HOME
+      USER jboss
+      CMD $JBOSS_HOME/bin/openshift-launch.sh
+    images:
+    - from:
+        kind: ImageStreamTag
+        name: tasks-build-artifacts:latest
+      paths:
+      - destinationDir: .
+        sourcePath: /s2i-output/server/
+    type: Dockerfile
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: jboss-eap73-runtime-openshift:7.3
+        namespace: openshift
+      imageOptimizationPolicy: SkipLayers
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - imageChange:
+      from:
+        kind: ImageStreamTag
+        name: tasks-build-artifacts:latest
+    type: ImageChange
+  - type: ConfigChange
+status:
+  lastVersion: 1

@@ -1,0 +1,77 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
+  creationTimestamp: "2020-12-03T13:04:31Z"
+  labels:
+    build: tasks
+  managedFields:
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:build: {}
+      f:spec:
+        f:output:
+          f:to:
+            .: {}
+            f:kind: {}
+            f:name: {}
+        f:runPolicy: {}
+        f:source:
+          f:binary: {}
+          f:type: {}
+        f:strategy:
+          f:sourceStrategy:
+            .: {}
+            f:from:
+              .: {}
+              f:kind: {}
+              f:name: {}
+              f:namespace: {}
+          f:type: {}
+        f:triggers: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-03T13:04:31Z"
+  name: tasks
+  namespace: user15-tasks-dev
+  resourceVersion: "5110160"
+  selfLink: /apis/build.openshift.io/v1/namespaces/user15-tasks-dev/buildconfigs/tasks
+  uid: aaaa6af7-0dac-4c74-a795-0c7b15a6e7a0
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: tasks:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    binary: {}
+    type: Binary
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: jboss-eap72-openshift:1.0
+        namespace: openshift
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: dnbSAhzXwBL0nyrfSSQU
+    type: GitHub
+  - generic:
+      secret: pSD_a04PvVRNoo6n88EB
+    type: Generic
+status:
+  lastVersion: 0

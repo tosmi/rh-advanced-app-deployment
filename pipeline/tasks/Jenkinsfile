@@ -215,15 +215,13 @@ pipeline {
 	script {
 	  openshift.withCluster() {
             openshift.withProject("${prodProject}") {
-	      def next = ""
-
+	      def next = "tasks-blue"
 	      def route = openshift.selector("route", "tasks").object()
+
 	      echo "Currently ${route.spec.to.name} is active"
 
 	      if ( route.spec.to.name == "tasks-blue") {
 		next = "tasks-green"
-	      } else {
-		next = "tasks-blue"
 	      }
 
 	      // TBD: image update to pull from nexus

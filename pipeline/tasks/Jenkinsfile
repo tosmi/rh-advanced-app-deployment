@@ -51,7 +51,7 @@ pipeline {
     stage('Build War File') {
       steps {
         echo "Building version ${devTag}"
-        // sh "${mvnNexusCmd} clean package -DskipTests"
+        sh "${mvnNexusCmd} clean package -DskipTests"
       }
     }
 
@@ -59,7 +59,7 @@ pipeline {
     stage('Unit Tests') {
       steps {
         echo "Running Unit Tests"
-        // sh "${mvnNexusCmd} test"
+        sh "${mvnNexusCmd} test"
       }
     }
 
@@ -75,7 +75,7 @@ pipeline {
     stage('Publish to Nexus') {
       steps {
         echo "Publish to Nexus"
-        // sh "${mvnNexusCmd} deploy"
+        sh "${mvnNexusCmd} deploy"
       }
     }
 
@@ -88,7 +88,7 @@ pipeline {
                 openshift.withProject("user15-tasks-dev"){
                     def bc = openshift.selector("buildconfig/tasks")
                     bc.describe()
-                    // bc.startBuild("--from-file=http://nexus.${prefix}-nexus.svc.cluster.local:8081/repository/releases/org/jboss/quickstarts/eap/tasks/${prodTag}/tasks-${prodTag}.war")
+                    bc.startBuild("--from-file=http://nexus.${prefix}-nexus.svc.cluster.local:8081/repository/releases/org/jboss/quickstarts/eap/tasks/${prodTag}/tasks-${prodTag}.war")
 
                     def builds = bc.related('builds')
 
@@ -124,7 +124,7 @@ pipeline {
 
                     echo "Rolling out latest tasks deployment"
                     def dc = openshift.selector("dc", "tasks")
-                    // dc.rollout().latest()
+                    dc.rollout().latest()
 
                     timeout(10) {
                         echo "Waiting for deployment to finish..."
@@ -163,16 +163,16 @@ pipeline {
           echo "Retrieving tasks"
           status = sh(returnStdout: true, script: "curl -sw '%{response_code}' -o /dev/null -u 'tasks:redhat1' -X GET http://tasks.${prefix}-tasks-dev.svc.cluster.local:8080/ws/tasks/1").trim()
           echo "Status: " + status
-          // if (status != "200") {
-	  // 	error 'Integration Retrieve Test Failed!'
-          // }
+          if (status != "200") {
+		error 'Integration Retrieve Test Failed!'
+          }
 
           echo "Deleting tasks"
           status = sh(returnStdout: true, script: "curl -sw '%{response_code}' -o /dev/null -u 'tasks:redhat1' -X DELETE http://tasks.${prefix}-tasks-dev.svc.cluster.local:8080/ws/tasks/1").trim()
           echo "Status: " + status
-          // if (status != "204") {
-	  // 	error 'Integration Delete Test Failed!'
-          // }
+          if (status != "204") {
+		error 'Integration Delete Test Failed!'
+          }
         }
       }
     }
@@ -184,7 +184,6 @@ pipeline {
 	script {
 	  openshift.withCluster() {
             openshift.withProject("user15-tasks-dev") {
-	      // TBD: Tag the built image with the production tag.
               openshift.tag("tasks:${devTag}", "tasks:${prodTag}")
 
 	      def srcApplicationRef = openshift.selector("istag", "tasks:${prodTag}").object().image.dockerImageReference
@@ -215,17 +214,19 @@ pipeline {
 	  openshift.withCluster() {
             openshift.withProject("${prodProject}") {
 	      def next = ""
-	      def dc_blue = openshift.selector("dc", "tasks-blue")
-	      def dc_green = openshift.selector("dc", "tasks-green")
 
 	      def route = openshift.selector("route", "tasks").object()
 	      echo "Currently ${route.spec.to.name} is active"
 
-	      if ( route.spec.to.name == "task-blue") {
+	      if ( route.spec.to.name == "tasks-blue") {
 		next = "tasks-green"
 	      } else {
 		next = "tasks-blue"
 	      }
+
+	      // TDB: image update to pull from nexus
+	      //openshift.set("image", "dc/tasks", "tasks=image-registry.openshift-image-registry.svc:5000/${prefix}-tasks-dev/tasks:${devTag}")
+
 	      echo "Going to deploy ${next}"
               def dc = openshift.selector("dc", next)
               dc.rollout().latest()

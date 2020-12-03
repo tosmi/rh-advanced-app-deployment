@@ -16,8 +16,8 @@ def destApp     = "tasks-green"
 def activeApp   = ""
 def svcName     = "tasks"
 def prodRegistry = "nexus-docker.user15-nexus.svc.cluster.local:5000"
-def prodProject = "user15-tasks-prod"
 def prodToken   = "bla"
+
 pipeline {
   agent {
     // Using the Jenkins Agent Pod that we defined earlier

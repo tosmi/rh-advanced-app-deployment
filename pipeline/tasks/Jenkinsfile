@@ -217,6 +217,7 @@ pipeline {
             openshift.withProject("${prodProject}") {
 	      def next = "tasks-blue"
 	      def route = openshift.selector("route", "tasks").object()
+	      def srcImageURL = "${prodRegistry}/${prodProject}/tasks:${prodTag}"
 
 	      echo "Currently ${route.spec.to.name} is active"
 
@@ -225,7 +226,7 @@ pipeline {
 	      }
 
 	      // TBD: image update to pull from nexus
-	      //openshift.set("image", "dc/tasks", "tasks=image-registry.openshift-image-registry.svc:5000/${prefix}-tasks-dev/tasks:${devTag}")
+	      openshift.set("image", "dc/${next}", "${next}=${srcImageURL}")
 
 	      echo "Going to deploy ${next}"
               def dc = openshift.selector("dc", next)
@@ -243,7 +244,6 @@ pipeline {
               } else {
                 error "Unable to connect to ${next}"
               }
-
 	    }
 	  }
 	}

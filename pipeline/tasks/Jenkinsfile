@@ -17,6 +17,9 @@ def activeApp   = ""
 def svcName     = "tasks"
 def prodRegistry = "nexus-registry-user15-nexus.apps.cluster-c78c.c78c.example.opentlc.com"
 
+def blueGreenTarget = "tasks-blue"
+
+
 pipeline {
   agent {
     // Using the Jenkins Agent Pod that we defined earlier
@@ -214,21 +217,20 @@ pipeline {
 	script {
 	  openshift.withCluster() {
             openshift.withProject("${prodProject}") {
-	      def next = "tasks-blue"
 	      def route = openshift.selector("route", "tasks").object()
 	      def srcImageURL = "${prodRegistry}/${prodProject}/tasks:${prodTag}"
 
 	      echo "Currently ${route.spec.to.name} is active"
 
 	      if ( route.spec.to.name == "tasks-blue") {
-		next = "tasks-green"
+		blueGreenTarget = "tasks-green"
 	      }
 
-	      // TBD: image update to pull from nexus
-	      openshift.set("image", "dc/${next}", "${next}=${srcImageURL}")
+	      // Update image to pull $prodTag from nexus
+	      openshift.set("image", "dc/${blueGreenTarget}", "${blueGreenTarget}=${srcImageURL}")
 
-	      echo "Going to deploy ${next}"
-              def dc = openshift.selector("dc", next)
+	      echo "Going to deploy ${blueGreenTarget}"
+              def dc = openshift.selector("dc", blueGreenTarget)
               dc.rollout().latest()
 
 	      timeout(10) {
@@ -236,12 +238,12 @@ pipeline {
                 dc.rollout().status()
               }
 
-	      echo "Checking service availabilty for  ${next}"
-              def connected = openshift.verifyService("${next}")
+	      echo "Checking service availabilty for  ${blueGreenTarget}"
+              def connected = openshift.verifyService("${blueGreenTarget}")
               if (connected) {
-                echo "Able to connect to ${next}"
+                echo "Able to connect to ${blueGreenTarget}"
               } else {
-                error "Unable to connect to ${next}"
+                error "Unable to connect to ${blueGreenTarget}"
               }
 	    }
 	  }
@@ -251,12 +253,16 @@ pipeline {
 
     stage('Switch over to new Version') {
       steps {
-        // TBD: Stop for approval
+	script {
+	  openshift.withCluster() {
+            openshift.withProject("${prodProject}") {
+	      def route = openshift.selector("route", "tasks").object()
 
+	      route.spec.to.name = ${blueGreenTarget}
 
-        echo "Executing production switch"
-        // TBD: After approval execute the switch
-
+	      echo "Executing production switch"
+	      openshift.apply(route)
+	}
       }
     }
   }

@@ -258,7 +258,7 @@ pipeline {
             openshift.withProject("${prodProject}") {
 	      def route = openshift.selector("route", "tasks").object()
 
-	      route.spec.to.name = ${blueGreenTarget}
+	      route.spec.to.name = "${blueGreenTarget}"
 
 	      echo "Executing production switch"
 	      openshift.apply(route)

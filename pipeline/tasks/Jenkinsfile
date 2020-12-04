@@ -262,6 +262,8 @@ pipeline {
 
 	      echo "Executing production switch"
 	      openshift.apply(route)
+	    }
+	  }
 	}
       }
     }

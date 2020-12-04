@@ -205,12 +205,6 @@ pipeline {
       steps {
         echo "Blue/Green Deployment"
 
-        // TBD: 1. Determine which application is active
-        //      2. Update the image for the other application
-        //      3. Deploy into the other application
-        //      4. Recreate Config maps for other application
-        //      5. Wait until application is running
-        //         See above for example code
 	script {
 	  openshift.withCluster() {
             openshift.withProject("${prodProject}") {

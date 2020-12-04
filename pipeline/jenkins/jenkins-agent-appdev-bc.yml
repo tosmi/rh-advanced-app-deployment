@@ -1,0 +1,98 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
+  creationTimestamp: "2020-12-02T13:48:33Z"
+  labels:
+    build: jenkins-agent-appdev
+  managedFields:
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:build: {}
+      f:spec:
+        f:output:
+          f:to:
+            .: {}
+            f:kind: {}
+            f:name: {}
+        f:runPolicy: {}
+        f:source:
+          f:dockerfile: {}
+          f:type: {}
+        f:strategy:
+          f:dockerStrategy:
+            .: {}
+            f:from:
+              .: {}
+              f:kind: {}
+              f:name: {}
+          f:type: {}
+    manager: oc
+    operation: Update
+    time: "2020-12-02T13:48:33Z"
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:triggers: {}
+      f:status:
+        f:lastVersion: {}
+    manager: openshift-apiserver
+    operation: Update
+    time: "2020-12-02T13:48:33Z"
+  name: jenkins-agent-appdev
+  namespace: user15-jenkins
+  resourceVersion: "3496273"
+  selfLink: /apis/build.openshift.io/v1/namespaces/user15-jenkins/buildconfigs/jenkins-agent-appdev
+  uid: c0a8bd1a-0553-4d12-b77b-b2ca46904062
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: jenkins-agent-appdev:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    dockerfile: |
+      FROM registry.access.redhat.com/ubi8/go-toolset:latest as builder
+      ENV SKOPEO_VERSION=v1.0.0
+      RUN git clone -b $SKOPEO_VERSION https://github.com/containers/skopeo.git && cd skopeo/ && make binary-local DISABLE_CGO=1
+
+      FROM image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:v4.0 as final
+      USER root
+      RUN mkdir /etc/containers
+      COPY --from=builder /opt/app-root/src/skopeo/default-policy.json /etc/containers/policy.json
+      COPY --from=builder /opt/app-root/src/skopeo/skopeo /usr/bin
+      USER 1001
+    type: Dockerfile
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: jenkins-agent-maven:v4.0
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: URv8ZjjdXeEX95HSV2O4
+    type: GitHub
+  - generic:
+      secret: SFylgMeV3amTAWDaGOIu
+    type: Generic
+  - type: ConfigChange
+  - imageChange:
+      lastTriggeredImageID: image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven@sha256:8839c47594ea0955ebd791275f8d2910597dbb8921edbf778d65d7c878671f44
+    type: ImageChange
+status:
+  lastVersion: 1

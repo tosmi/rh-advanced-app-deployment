@@ -5,6 +5,7 @@ def prefix      = "user15"
 // Set Maven command to always include Nexus Settings
 def mvnNexusCmd = "mvn -s ./nexus_openshift_settings.xml"
 def mvnSonarCmd = "mvn -s ./sonar_openshift_settings.xml"
+
 // Set Development and Production Project Names
 def devProject  = "${prefix}-tasks-dev"
 def prodProject = "${prefix}-tasks-prod"
@@ -12,13 +13,9 @@ def prodProject = "${prefix}-tasks-prod"
 def devTag      = "0.0-0"
 // Set the tag for the production image: version
 def prodTag     = "0.0"
-def destApp     = "tasks-green"
-def activeApp   = ""
 def svcName     = "tasks"
 def prodRegistry = "nexus-registry-user15-nexus.apps.cluster-c78c.c78c.example.opentlc.com"
-
 def blueGreenTarget = "tasks-blue"
-
 
 pipeline {
   agent {

@@ -223,7 +223,14 @@ pipeline {
 		blueGreenTarget = "tasks-green"
 	      }
 
+              echo "Updating ${blueGreenTarget} configmap"
+	      // Keep this here, has to be defined _after_ switching the target
+	      def blueGreenTargetConfig = "${blueGreenTarget}-config"
+              openshift.selector( 'cm', "${blueGreenTargetConfig}" ).delete('--ignore-not-found')
+              openshift.create('configmap', "${blueGreenTargetConfig}", '--from-file=./configuration/application-users.properties', '--from-file=./configuration/application-roles.properties')
+
 	      // Update image to pull $prodTag from nexus
+	      echo "Updating deployconfig ${blueGreenTarget} image..."
 	      openshift.set("image", "dc/${blueGreenTarget}", "${blueGreenTarget}=${srcImageURL}")
 
 	      echo "Going to deploy ${blueGreenTarget}"

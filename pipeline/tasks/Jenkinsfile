@@ -15,8 +15,7 @@ def prodTag     = "0.0"
 def destApp     = "tasks-green"
 def activeApp   = ""
 def svcName     = "tasks"
-def prodRegistry = "nexus-docker.user15-nexus.svc.cluster.local:5000"
-def prodToken   = "bla"
+def prodRegistry = "nexus-registry-user15-nexus.apps.cluster-c78c.c78c.example.opentlc.com"
 
 pipeline {
   agent {

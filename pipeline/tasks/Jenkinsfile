@@ -227,6 +227,11 @@ pipeline {
 	      echo "Updating deployconfig ${blueGreenTarget} image..."
 	      openshift.set("image", "dc/${blueGreenTarget}", "${blueGreenTarget}=${srcImageURL}")
 
+	      echo "Updating tasks configmap"
+              openshift.selector( 'cm', '${blueGreenTarget}-config' ).delete('--ignore-not-found')
+              openshift.create('configmap', '${blueGreenTarget}-config', '--from-file=./configuration/application-users.properties', '--from-file=./configuration/application-roles.properties')
+
+
 	      echo "Going to deploy ${blueGreenTarget}"
               def dc = openshift.selector("dc", blueGreenTarget)
               dc.rollout().latest()
